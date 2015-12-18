@@ -14,11 +14,11 @@ import uwcse.graphics.Oval;
 import uwcse.graphics.Rectangle;
 
 /**
- * A HuynhHTNguyenDNSpaceInvader displays a fleet of alien ships and a space ship. The player
+ * A SpaceInvader displays a fleet of alien ships and a space ship. The player
  * directs the moves of the spaceship and can shoot at the aliens.
  */
 
-public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
+public class SpaceInvader extends GWindowEventAdapter {
 	// Possible actions from the keyboard
 	/** No action */
 	public static final int DO_NOTHING = 0;
@@ -40,21 +40,21 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 	private GWindow window;
 
 	// The space ship
-	private HuynhHTNguyenDNSpaceShip spaceShip;
+	private SpaceShip spaceShip;
 
-	private HuynhHTNguyenDNMotherShipCore boss;
+	private MotherShipCore boss;
 
 	// Direction of motion given by the player
-	private int dirFromKeyboard = HuynhHTNguyenDNMovingObject.LEFT;
+	private int dirFromKeyboard = MovingObject.LEFT;
 
 	// The aliens
-	private ArrayList<HuynhHTNguyenDNAlien> aliens;
+	private ArrayList<Alien> aliens;
 
-	private ArrayList<HuynhHTNguyenDNCentipade> aliens2;
+	private ArrayList<Centipade> aliens2;
 
-	private ArrayList<HuynhHTNguyenDNDragonFly> aliens3;
+	private ArrayList<DragonFly> aliens3;
 
-	private ArrayList<HuynhHTNguyenDNMotherShipCore> aliens4;
+	private ArrayList<MotherShipCore> aliens4;
 
 	// Count games
 	private int countGame;
@@ -63,10 +63,10 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 	/**
 	 * Construct a space invader game
 	 */
-	public HuynhHTNguyenDNSpaceInvader() {
+	public SpaceInvader() {
 		this.window = new GWindow("Space invaders", 500, 500);
 		this.window.setExitOnClose();
-		this.window.addEventHandler(this); // this HuynhHTNguyenDNSpaceInvader handles all of
+		this.window.addEventHandler(this); // this SpaceInvader handles all of
 		// the events fired by the graphics
 		// window
 
@@ -96,7 +96,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		
 		Rectangle background = backGround();
 		// ArrayList of aliens
-		this.aliens = new ArrayList<HuynhHTNguyenDNAlien>();
+		this.aliens = new ArrayList<Alien>();
 
 		// Create 12 aliens
 		// Initial location of the aliens
@@ -105,7 +105,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		int y = 0;
 		for (int i = 0; i < 12; i++) {
 			y = (int) (Math.random() * (background.getHeight() / 2));
-			this.aliens.add(new HuynhHTNguyenDNAlien(this.window, new Point(x, y)));
+			this.aliens.add(new Alien(this.window, new Point(x, y)));
 			x += Math.random() * (background.getWidth() / 8);
 		}
 
@@ -128,7 +128,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		// Show the information
 		String AInfor1 = "                      XO0oo \n	"
 				+ "Weekness: the head       Speed:***\n" + "Difficulty:**";
-		JOptionPane.showMessageDialog(null, AInfor1, "Allien 101: HuynhHTNguyenDNCentipade",
+		JOptionPane.showMessageDialog(null, AInfor1, "Allien 101: Centipade",
 				JOptionPane.INFORMATION_MESSAGE);
 
 		String AInfor2 = "                      > O < \n	"
@@ -143,19 +143,19 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 	
 		Rectangle background = backGround();
 		// ArrayList of aliens
-		this.aliens2 = new ArrayList<HuynhHTNguyenDNCentipade>();
-		this.aliens3 = new ArrayList<HuynhHTNguyenDNDragonFly>();
+		this.aliens2 = new ArrayList<Centipade>();
+		this.aliens3 = new ArrayList<DragonFly>();
 
 		// Create 12 aliens
 		// Initial location of the aliens
 		// (Make sure that the space ship can fire at them)
 		int x = 70;
-		int y = 30; // 10 * HuynhHTNguyenDNAlien.RADIUS;
+		int y = 30; // 10 * Alien.RADIUS;
 		for (int i = 0; i < 5; i++){
 			y = (int) (Math.random() * (background.getHeight() / 2));
 			
 			
-			this.aliens3.add(new HuynhHTNguyenDNDragonFly(this.window, new Point(x + 10,
+			this.aliens3.add(new DragonFly(this.window, new Point(x + 10,
 					y + 20)));
 			x +=  Math.random()*(background.getWidth() / 8);
 		}
@@ -164,7 +164,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		y = 40;
 		for (int j = 0; j < 7; j++) {
 			y = (int) (Math.random() * (background.getHeight() / 2));
-			this.aliens2.add(new HuynhHTNguyenDNCentipade(this.window,
+			this.aliens2.add(new Centipade(this.window,
 					new Point(x + 5, y - 10)));
 			x += background.getWidth() / 8;
 		}
@@ -188,7 +188,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 
 				"Weekness: unknow     Speed:****\n" + "Difficulty:**********";
 		JOptionPane.showMessageDialog(null, AInfor3,
-				"HuynhHTNguyenDNAlien 101: Mothership Core", JOptionPane.INFORMATION_MESSAGE);
+				"Alien 101: Mothership Core", JOptionPane.INFORMATION_MESSAGE);
 
 		// Clear the window
 		this.window.erase();
@@ -197,18 +197,19 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		Rectangle background = backGround();
 
 		// ArrayList of aliens
-	
-		this.aliens4 = new ArrayList<HuynhHTNguyenDNMotherShipCore>();
+		// this.aliens2 = new ArrayList<Centipade>();
+		// this.aliens3 = new ArrayList<DragonFly>();
+		this.aliens4 = new ArrayList<MotherShipCore>();
 	
 
 		// Create 12 aliens
 		// Initial location of the aliens
 		// (Make sure that the space ship can fire at them)
 		int x = 40;
-		int y = 100; // 10 * HuynhHTNguyenDNAlien.RADIUS;
+		int y = 100; // 10 * Alien.RADIUS;
 		
-		
-			this.aliens4.add(new HuynhHTNguyenDNMotherShipCore(this.window, new Point(x, y)));
+			// if (y == 0) {
+			this.aliens4.add(new MotherShipCore(this.window, new Point(x, y)));
 
 			spaceShip();
 		// start timer events
@@ -222,10 +223,10 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 	public void timerExpired(GWindowEvent we) {
 		// Perform the action requested by the user?
 		switch (this.action) {
-		case HuynhHTNguyenDNSpaceInvader.SET_SPACESHIP_DIRECTION:
+		case SpaceInvader.SET_SPACESHIP_DIRECTION:
 			this.spaceShip.setDirection(this.dirFromKeyboard);
 			break;
-		case HuynhHTNguyenDNSpaceInvader.SHOOT:
+		case SpaceInvader.SHOOT:
 			this.spaceShip.shoot(this.aliens, this.aliens2, this.aliens3,
 					this.aliens4);
 			break;
@@ -233,7 +234,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		if (this.boss != null) {
 			this.boss.shoot(this.spaceShip);
 		}
-		this.action = HuynhHTNguyenDNSpaceInvader.DO_NOTHING; // Don't do the same action
+		this.action = SpaceInvader.DO_NOTHING; // Don't do the same action
 		// twice
 
 		// Show the new locations of the objects
@@ -254,29 +255,29 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		// Put here the code to move the space ship with the < and > keys
 
 		case ' ': // shoot at the aliens
-			this.action = HuynhHTNguyenDNSpaceInvader.SHOOT;
+			this.action = SpaceInvader.SHOOT;
 			break;
 		case 'm':
-			this.action = HuynhHTNguyenDNSpaceInvader.SET_SPACESHIP_DIRECTION;
-			this.dirFromKeyboard = HuynhHTNguyenDNMovingObject.UP;
+			this.action = SpaceInvader.SET_SPACESHIP_DIRECTION;
+			this.dirFromKeyboard = MovingObject.UP;
 			break;
 		case 'n':
-			this.action = HuynhHTNguyenDNSpaceInvader.SET_SPACESHIP_DIRECTION;
-			this.dirFromKeyboard = HuynhHTNguyenDNMovingObject.DOWN;
+			this.action = SpaceInvader.SET_SPACESHIP_DIRECTION;
+			this.dirFromKeyboard = MovingObject.DOWN;
 			break;
 		case ',': // < if uppercase --> left
-			this.action = HuynhHTNguyenDNSpaceInvader.SET_SPACESHIP_DIRECTION;
-			this.dirFromKeyboard = HuynhHTNguyenDNMovingObject.LEFT;
+			this.action = SpaceInvader.SET_SPACESHIP_DIRECTION;
+			this.dirFromKeyboard = MovingObject.LEFT;
 			break;
 		case '.': // > if uppercase --> right
-			this.action = HuynhHTNguyenDNSpaceInvader.SET_SPACESHIP_DIRECTION;
-			this.dirFromKeyboard = HuynhHTNguyenDNMovingObject.RIGHT;
+			this.action = SpaceInvader.SET_SPACESHIP_DIRECTION;
+			this.dirFromKeyboard = MovingObject.RIGHT;
 			break;
 		case 'q': // quit the game (BlueJ might not like that one)
 			System.exit(0);
 
 		default: // no new action
-			this.action = HuynhHTNguyenDNSpaceInvader.DO_NOTHING;
+			this.action = SpaceInvader.DO_NOTHING;
 			break;
 		}
 	}
@@ -306,9 +307,9 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 
 		// Remove dead aliens from ArrayList
 		if (aliens2 != null) {
-			Iterator<HuynhHTNguyenDNCentipade> a2 = aliens2.iterator();
+			Iterator<Centipade> a2 = aliens2.iterator();
 			while (a2.hasNext()) {
-				HuynhHTNguyenDNCentipade a = a2.next();
+				Centipade a = a2.next();
 				if (a.isDead()) {
 					a2.remove();
 				}
@@ -316,9 +317,9 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		}
 
 		if (aliens3 != null) {
-			Iterator<HuynhHTNguyenDNDragonFly> a3 = aliens3.iterator();
+			Iterator<DragonFly> a3 = aliens3.iterator();
 			while (a3.hasNext()) {
-				HuynhHTNguyenDNDragonFly a = a3.next();
+				DragonFly a = a3.next();
 				if (a.isDead()) {
 					a3.remove();
 				}
@@ -326,18 +327,18 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		}
 
 		if (aliens4 != null) {
-			Iterator<HuynhHTNguyenDNMotherShipCore> a4 = aliens4.iterator();
+			Iterator<MotherShipCore> a4 = aliens4.iterator();
 			while (a4.hasNext()) {
-				HuynhHTNguyenDNMotherShipCore a = a4.next();
+				MotherShipCore a = a4.next();
 				if (a.isDead()) {
 					a4.remove();
 				}
 			}
 		}
 
-		Iterator<HuynhHTNguyenDNAlien> it = aliens.iterator();
+		Iterator<Alien> it = aliens.iterator();
 		while (it.hasNext()) {
-			HuynhHTNguyenDNAlien a = it.next();
+			Alien a = it.next();
 			if (a.isDead()) {
 				it.remove();
 			}
@@ -345,7 +346,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 
 		// Move the aliens
 		if (countGame == 1) {
-			for (HuynhHTNguyenDNAlien a : aliens) {
+			for (Alien a : aliens) {
 				a.move();
 				if (spaceShip.boundingBox.getY() <= a.boundingBox.getY()) {
 					if (a.boundingBox.getX() >= spaceShip.boundingBox.getX() - 5
@@ -359,7 +360,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		}
 
 		if (countGame == 2) {
-			for (HuynhHTNguyenDNCentipade c : aliens2) {
+			for (Centipade c : aliens2) {
 				c.move();
 				if (spaceShip.boundingBox.getY() <= c.boundingBox.getY()) {
 					if (c.boundingBox.getX() >= spaceShip.boundingBox.getX() - 5
@@ -371,7 +372,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 				}
 			}
 
-			for (HuynhHTNguyenDNDragonFly d : aliens3) {
+			for (DragonFly d : aliens3) {
 				d.move();
 				if (spaceShip.boundingBox.getY() <= d.boundingBox.getY()) {
 					if (d.boundingBox.getX() >= spaceShip.boundingBox.getX() - 5
@@ -385,7 +386,7 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 		}
 
 		if (countGame == 3) {
-			for (HuynhHTNguyenDNMotherShipCore b : aliens4) {
+			for (MotherShipCore b : aliens4) {
 				b.move();
 				if (spaceShip.boundingBox.getY() <= b.boundingBox.getY()) {
 					if (b.boundingBox.getX() >= spaceShip.boundingBox.getX() - 5
@@ -461,14 +462,14 @@ public class HuynhHTNguyenDNSpaceInvader extends GWindowEventAdapter {
 	public void spaceShip(){
 		// Create the space ship at the bottom of the window
 				int x = this.window.getWindowWidth() / 2;
-				int y = this.window.getWindowHeight() - HuynhHTNguyenDNSpaceShip.HEIGHT / 2;
-				this.spaceShip = new HuynhHTNguyenDNSpaceShip(this.window, new Point(x, y));
+				int y = this.window.getWindowHeight() - SpaceShip.HEIGHT / 2;
+				this.spaceShip = new SpaceShip(this.window, new Point(x, y));
 	}
 
 	/**
 	 * Starts the application
 	 */
 	public static void main(String[] args) {
-		new HuynhHTNguyenDNSpaceInvader();
+		new SpaceInvader();
 	}
 }
